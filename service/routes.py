@@ -111,7 +111,15 @@ def update_account():
 # DELETE AN ACCOUNT
 ######################################################################
 
-# ... place you code here to DELETE an account ...
+@app.route("/accounts", methods=["DELETE"])
+def delete_account():
+    req=request.get_json()
+    id=int(req["id"])
+    account=Account.find(id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND)
+    account.delete()
+    return jsonify({}),status.HTTP_200_OK
 
 
 ######################################################################
