@@ -167,3 +167,20 @@ class TestAccountService(TestCase):
         resp=self.client.put(f"{BASE_URL}",json=account, content_type="application/json")
         resp=self.client.get(f"{BASE_URL}/{id}", content_type="application/json")
         self.assertEqual(resp.get_json()["name"],"updated")
+
+
+    def test_delete_account(self):
+        self._create_accounts(1)
+        account = self.client.get(
+            f"{BASE_URL}", content_type="application/json"
+        ).get_json()
+        to_del=account[0]
+        self.assertEqual(len(account),1)
+        resp=self.client.delete(f"{BASE_URL}",json=to_del,content_type="application/json")
+        self.assertEqual(resp.status_code,status.HTTP_200_OK)
+        account = self.client.get(
+            f"{BASE_URL}", content_type="application/json"
+        ).get_json()
+        self.assertEqual(len(account),0)
+        resp=self.client.delete(f"{BASE_URL}",json=to_del,content_type="application/json")
+        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
