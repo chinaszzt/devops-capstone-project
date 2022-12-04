@@ -131,10 +131,16 @@ class TestAccountService(TestCase):
     
     def test_list_accounts(self):
         resp = self.client.get(
-            f"{BASE_URL}/list", content_type="application/json"
+            f"{BASE_URL}", content_type="application/json"
         )
         self.assertEqual(resp.status_code,status.HTTP_200_OK)
-        
+    
+        self.assertEqual(len(resp.get_json()),0)
+        self._create_accounts(5)
+        resp = self.client.get(
+            f"{BASE_URL}", content_type="application/json"
+        )
+        self.assertEqual(len(resp.get_json()),5)
 
     def test_unsupported_media_type(self):
         """It should not Create an Account when sending the wrong media type"""
