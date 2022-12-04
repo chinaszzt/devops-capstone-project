@@ -91,7 +91,20 @@ def read_account(id):
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
-# ... place you code here to UPDATE an account ...
+@app.route("/accounts", methods=["PUT"])
+def update_account():
+    req=request.get_json()
+    id=int(req["id"])
+    account=Account.find(id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND)
+    account.name=req["name"]
+    account.email=req["email"]
+    account.phone_number=req["email"]
+    account.address=req["address"]
+    account.update()
+    return jsonify({}),status.HTTP_200_OK
+
 
 
 ######################################################################
