@@ -61,17 +61,17 @@ def create_accounts():
 # LIST ALL ACCOUNTS
 ######################################################################
 
+
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     """
     list all accounts
     """
-    accounts=Account.all()
-    sered=[]
+    accounts = Account.all()
+    sered = []
     for ac in accounts:
         sered.append(ac.serialize())
     return jsonify(sered), status.HTTP_200_OK
-    
 
 
 ######################################################################
@@ -80,46 +80,46 @@ def list_accounts():
 
 @app.route("/accounts/<int:id>", methods=["GET"])
 def read_account(id):
-    account=Account.find(id)
+    account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
-    dic=account.serialize()
-    return dic,status.HTTP_200_OK
+    dic = account.serialize()
+    return dic, status.HTTP_200_OK
 
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
+
 @app.route("/accounts", methods=["PUT"])
 def update_account():
-    req=request.get_json()
-    id=int(req["id"])
-    account=Account.find(id)
+    req = request.get_json()
+    id = int(req["id"])
+    account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
-    account.name=req["name"]
-    account.email=req["email"]
-    account.phone_number=req["email"]
-    account.address=req["address"]
+    account.name = req["name"]
+    account.email = req["email"]
+    account.phone_number = req["email"]
+    account.address = req["address"]
     account.update()
-    return jsonify({}),status.HTTP_200_OK
-
-
+    return jsonify({}), status.HTTP_200_OK
 
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
 
+
 @app.route("/accounts", methods=["DELETE"])
 def delete_account():
-    req=request.get_json()
-    id=int(req["id"])
-    account=Account.find(id)
+    req = request.get_json()
+    id = int(req["id"])
+    account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
     account.delete()
-    return jsonify({}),status.HTTP_200_OK
+    return jsonify({}), status.HTTP_200_OK
 
 
 ######################################################################

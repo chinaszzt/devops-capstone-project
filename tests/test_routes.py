@@ -70,7 +70,6 @@ class TestAccountService(TestCase):
             account.id = new_account["id"]
             accounts.append(account)
         return accounts
-    
 
     def test_get_account(self):
         """It should Read a single Account"""
@@ -129,19 +128,17 @@ class TestAccountService(TestCase):
         response = self.client.post(BASE_URL, json={"name": "not enough data"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    
     def test_list_accounts(self):
         resp = self.client.get(
             f"{BASE_URL}", content_type="application/json"
         )
-        self.assertEqual(resp.status_code,status.HTTP_200_OK)
-    
-        self.assertEqual(len(resp.get_json()),0)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.get_json()), 0)
         self._create_accounts(5)
         resp = self.client.get(
             f"{BASE_URL}", content_type="application/json"
         )
-        self.assertEqual(len(resp.get_json()),5)
+        self.assertEqual(len(resp.get_json()), 5)
 
     def test_unsupported_media_type(self):
         """It should not Create an Account when sending the wrong media type"""
@@ -159,29 +156,28 @@ class TestAccountService(TestCase):
         account = self.client.get(
             f"{BASE_URL}", content_type="application/json"
         ).get_json()[0]
-        id=account["id"]
-        account["name"]="updated"
-        account["id"]=0
-        resp=self.client.put(f"{BASE_URL}",json=account, content_type="application/json")
-        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
-        account["id"]=id
-        resp=self.client.put(f"{BASE_URL}",json=account, content_type="application/json")
-        resp=self.client.get(f"{BASE_URL}/{id}", content_type="application/json")
-        self.assertEqual(resp.get_json()["name"],"updated")
-
+        id = account["id"]
+        account["name"] = "updated"
+        account["id"] = 0
+        resp = self.client.put(f"{BASE_URL}", json=account, content_type="application/json")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+        account["id"] = id
+        resp = self.client.put(f"{BASE_URL}", json=account, content_type="application/json")
+        resp = self.client.get(f"{BASE_URL}/{id}", content_type="application/json")
+        self.assertEqual(resp.get_json()["name"], "updated")
 
     def test_delete_account(self):
         self._create_accounts(1)
         account = self.client.get(
             f"{BASE_URL}", content_type="application/json"
         ).get_json()
-        to_del=account[0]
-        self.assertEqual(len(account),1)
-        resp=self.client.delete(f"{BASE_URL}",json=to_del,content_type="application/json")
-        self.assertEqual(resp.status_code,status.HTTP_200_OK)
+        to_del = account[0]
+        self.assertEqual(len(account), 1)
+        resp = self.client.delete(f"{BASE_URL}", json=to_del, content_type="application/json")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         account = self.client.get(
             f"{BASE_URL}", content_type="application/json"
         ).get_json()
-        self.assertEqual(len(account),0)
-        resp=self.client.delete(f"{BASE_URL}",json=to_del,content_type="application/json")
-        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
+        self.assertEqual(len(account), 0)
+        resp = self.client.delete(f"{BASE_URL}", json=to_del, content_type="application/json")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
